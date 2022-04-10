@@ -1,6 +1,6 @@
 name: shelf_router_classes
 description: An easier way to declare and use routes for the shelf and shelf_router packages using classes and Route annotations.
-version: 1.0.0
+version: 1.0.1
 repository: https://github.com/dbilgin/shelf_router_classes
 
 environment:
