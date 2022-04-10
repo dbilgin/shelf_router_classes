@@ -1,6 +1,7 @@
-## 1.0.1
+## 1.0.2
 
 * Removed unnecessary files from example project.
+* Added the example files to the root of the example.
 
 ## 1.0.0
 
