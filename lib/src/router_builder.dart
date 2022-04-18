@@ -3,6 +3,8 @@ import 'dart:mirrors';
 import 'package:shelf_router/shelf_router.dart';
 
 import 'method_data.dart';
+import 'route_prefix.dart';
+import 'utils.dart';
 
 /// Loops through all the determined route [methods] and adds their
 /// necessary data into the [router].
@@ -35,6 +37,8 @@ List<MethodData> getRouteData(List<Type> types) {
   return routeData;
 }
 
+/// Checks the passed [classMirror] to see if there is a declared prefix
+/// through `@RoutePrefix` annotation.
 /// Creates a dummy instance out of the passed [ClassMirror]. Which gives
 /// it access to every field inside that class, including the methods.
 /// The [DeclarationMirror] allows us to go through the metadata of every
@@ -46,23 +50,31 @@ List<MethodData> _getMethodAnnotationPath(
   DeclarationMirror declaration,
   ClassMirror classMirror,
 ) {
+  final classMetaWithPrefix = classMirror.metadata.firstWhereOrNull((e) =>
+      e.reflectee.runtimeType == RoutePrefix && e.reflectee is RoutePrefix);
+  String? prefix = classMetaWithPrefix?.reflectee.prefix;
+
   final newInst = classMirror.newInstance(const Symbol(''), []);
   List<MethodData> methods = [];
 
   for (var instance in declaration.metadata) {
-    if (instance.hasReflectee) {
-      var reflectee = instance.reflectee;
-      if (reflectee.runtimeType == Route && reflectee is Route) {
-        final field = newInst.getField(declaration.simpleName);
-        final routeMethod = field.reflectee;
-
-        methods.add(MethodData(
-          reflectee.route,
-          reflectee.verb,
-          routeMethod,
-        ));
-      }
+    if (!instance.hasReflectee) {
+      continue;
     }
+
+    var reflectee = instance.reflectee;
+    if (reflectee.runtimeType != Route || reflectee is! Route) {
+      continue;
+    }
+
+    final field = newInst.getField(declaration.simpleName);
+    final routeMethod = field.reflectee;
+
+    methods.add(MethodData(
+      prefix == null ? reflectee.route : '$prefix${reflectee.route}',
+      reflectee.verb,
+      routeMethod,
+    ));
   }
 
   return methods;

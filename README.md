@@ -1,4 +1,5 @@
 # shelf_router_classes
+
 [![Pub Version](https://img.shields.io/pub/v/shelf_router_classes?color=blueviolet)](https://pub.dev/packages/shelf_router_classes)
 
 An easier way to declare and use routes for the [shelf](https://pub.dev/packages/shelf) and [shelf_router](https://pub.dev/packages/shelf_router) packages using classes and Route annotations. It handles all the declaration automatically and no code generation is required.
@@ -14,7 +15,9 @@ The usage is fairly simple. You first need to declare your routes using classes 
 ```dart
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
+import 'package:shelf_router_classes/shelf_router_classes.dart';
 
+@RoutePrefix('/prefix')
 class ExampleService {
   @Route('GET', '/example')
   Response getAllExamples(Request request) {

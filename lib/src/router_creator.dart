@@ -14,7 +14,9 @@ import 'router_builder.dart';
 /// ```dart
 /// import 'package:shelf/shelf.dart';
 /// import 'package:shelf_router/shelf_router.dart';
+/// import 'package:shelf_router_classes/shelf_router_classes.dart';
 ///
+/// @RoutePrefix('/prefix')
 /// class ExampleService {
 ///   @Route('GET', '/example')
 ///   Response getAllExamples(Request request) {
